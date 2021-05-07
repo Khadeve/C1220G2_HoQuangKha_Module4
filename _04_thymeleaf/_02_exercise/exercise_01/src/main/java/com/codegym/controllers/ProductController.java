@@ -2,7 +2,6 @@ package com.codegym.controllers;
 
 import com.codegym.models.Product;
 import com.codegym.services.IProductService;
-import com.codegym.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +14,8 @@ import java.util.List;
 @Controller
 public class ProductController {
     @Autowired
-    private ProductService productService;
+    // private ProductService productService;
+    private IProductService productService;
 
     @GetMapping
     public ModelAndView index() {
