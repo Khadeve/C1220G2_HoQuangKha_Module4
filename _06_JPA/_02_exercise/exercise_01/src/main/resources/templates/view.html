@@ -30,6 +30,17 @@
             <textarea id="content" rows="4" cols="50" th:field="${blog.content}" readonly></textarea>
         </td>
     </tr>
+    <!--        categories----------->
+    <tr>
+        <td>Select categories:</td>
+        <td>
+            <input disabled type="checkbox" name="chosenCategories"
+                   th:each="category : ${categories}"
+                   th:text="${category.name}"
+                   th:value="${category.id}"
+                   th:field="${blog.categories}"
+            />
+        </td>
 </table>
 </body>
 </html>

@@ -18,20 +18,37 @@
     <a href="/create-blog">Create new blog</a>
 </p>
 
+<p>
+    <a href="/category/categories">Go to category list</a>
+</p>
+
 <th:block th:if="${deleteMessage}">
     <p style="color: red" th:text="${deleteMessage}"></p>
 </th:block>
+
+<form th:action="@{/}" method="get">
+    <input type="text" name="byName" th:value="${search}" placeholder="search by name">
+    <input type="submit" name="submit" th:value="Search">
+</form>
+<br>
 <table>
     <thead>
         <th>No</th>
         <th>Name</th>
+        <th>Category(s)</th>
         <th th:colspan="3">Action</th>
     </thead>
     <tbody>
         <th:block th:each="blog, counter : ${blogs}">
             <tr>
                 <td th:text="${counter.count}"></td>
+
                 <td th:text="${blog.name}"></td>
+                <td>
+                    <th:block th:each="category : ${blog.categories}">
+                        <span th:text="${category} +'|'"></span>
+                    </th:block>
+                </td>
                 <td><a th:href="@{/edit-blog/__${blog.id}__}">Edit</a></td>
                 <td><a th:href="@{/delete-blog/__${blog.id}__}">Delete</a></td>
                 <td><a th:href="@{/view-blog/__${blog.id}__}">View</a></td>
@@ -39,5 +56,12 @@
         </th:block>
     </tbody>
 </table>
+<div>
+    <div>
+        <a th:href="@{'/'(byName=${search}, page=${blogs.number - 1})}" th:if="${blogs.hasPrevious()}">Previous</a>
+        <span th:text="${blogs.number + 1}"></span>/<span th:text="${blogs.totalPages}"></span>
+        <a th:href="@{'/'(byName=${search}, page=${blogs.number + 1})}" th:if="${blogs.hasNext()}">Next</a>
+    </div>
+</div>
 </body>
 </html>

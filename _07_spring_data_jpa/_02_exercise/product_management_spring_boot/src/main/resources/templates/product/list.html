@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>product list</title>
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1>Product list</h1>
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand" href="/product/create">
+        Create new product
+    </a>
+    <form th:action="@{/product/search}" method="get" class="form-inline">
+        <input name="searchByName" th:value="${search}" class="form-control mr-sm-2" type="search" aria-label="Search" placeholder="product name">
+        <input name="searchByProductPrice" th:value="${search2}" class="form-control mr-sm-2" type="search" aria-label="Search" placeholder="product price">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+</nav>
+
+<th:block th:if="${message}">
+    <p style="color: red" th:text="${message}"></p>
+</th:block>
+
+<table class="table table-dark">
+    <thead>
+    <tr>
+        <th scope="col">No</th>
+        <th scope="col">Name</th>
+        <th scope="col">Manufacture</th>
+        <th scope="col">Production Date</th>
+        <th scope="col">Category</th>
+        <th scope="col" colspan="3">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="product, counter : ${products}">
+        <tr>
+            <th scope="row" th:text="${counter.count}"></th>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.manufacture}"></td>
+            <td th:text="${product.productionDate}"></td>
+            <td th:text="${product.category.name}"></td>
+            <td>
+                <a th:href="@{/product/view/__${product.id}__}">View</a>
+            </td>
+            <td>
+                <a th:href="@{/product/edit/__${product.id}__}">Edit</a>
+            </td>
+            <td>
+                <a th:href="@{/product/delete/__${product.id}__}">Delete</a>
+            </td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+<!--Pagination----------------->
+<div>
+    <a th:href="@{'/product/list'(page=${products.number - 1})}" th:if="${products.hasPrevious()}">Previous</a>
+    <span th:text="${products.number + 1}"></span>/<span th:text="${products.totalPages}"></span>
+    <a th:href="@{'/product/list'(page=${products.number + 1})}" th:if="${products.hasNext()}">Next</a>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

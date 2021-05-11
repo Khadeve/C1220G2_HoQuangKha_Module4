@@ -29,6 +29,18 @@
                 <textarea id="content" rows="4" cols="50" th:field="*{content}"></textarea>
             </td>
         </tr>
+<!--        categories----------->
+        <tr>
+            <td>Select categories:</td>
+            <td>
+                <input type="checkbox" name="chosenCategories"
+                       th:each="category : ${categories}"
+                       th:text="${category.name}"
+                       th:value="${category.id}"
+                       th:field="*{categories}"
+                />
+            </td>
+        </tr>
         <tr>
             <td></td>
             <td>

@@ -1,10 +1,16 @@
 package com.codegym.demo.controllers;
 
 import com.codegym.demo.models.Blog;
+import com.codegym.demo.models.Category;
 import com.codegym.demo.services.IBlogService;
+import com.codegym.demo.services.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,13 +20,28 @@ import java.util.List;
 @Controller
 public class BlogController {
     @Autowired
-    IBlogService blogService;
+    private IBlogService blogService;
 
-    @GetMapping
-    public ModelAndView showListBlog() {
+    @Autowired
+    private ICategoryService categoryService;
+
+    @ModelAttribute("categories")
+    public List<Category> categories() {
+        return categoryService.findAll();
+    }
+
+    @GetMapping("/")
+    public ModelAndView showListBlog(@PageableDefault(value = 3) Pageable pageable,
+                                     @RequestParam(name = "byName", required = false)String searchByName) {
         ModelAndView modelAndView = new ModelAndView("list");
-        List<Blog> blogList = blogService.findAll();
+        Page<Blog> blogList = null;
+        if (searchByName == null || searchByName.isEmpty()) {
+            blogList = blogService.findAll(pageable);
+        } else {
+            blogList = blogService.findAllByNameContaining(searchByName, pageable);
+        }
         modelAndView.addObject("blogs", blogList);
+        modelAndView.addObject("search", searchByName);
         return modelAndView;
     }
 
@@ -32,7 +53,9 @@ public class BlogController {
     }
 
     @PostMapping("/create-blog")
-    public String createNewBlog(@ModelAttribute(name = "blog") Blog blog, RedirectAttributes redirectAttributes) {
+    public String createNewBlog(@ModelAttribute(name = "blog") Blog blog,
+                                RedirectAttributes redirectAttributes)
+    {
         blogService.save(blog);
         redirectAttributes.addFlashAttribute("message", "Add new blog successfully!");
         return "redirect:/create-blog";
@@ -83,4 +106,16 @@ public class BlogController {
         modelAndView.addObject("editMessage", "Update successfully!");
         return modelAndView;
     }
+
+//    @GetMapping("/search-blog")
+//    public ModelAndView findAllByNameContaining(@RequestParam(name = "byName")String byName,
+//                                                @PageableDefault(value = 3)Pageable pageable,
+//                                                @RequestParam(name = "counter", required = false, defaultValue = "3")String counter)
+//    {
+//        Page<Blog> blogList = blogService.findAllByNameContaining(byName, pageable);
+//        ModelAndView modelAndView = new ModelAndView("list");
+//        modelAndView.addObject("blogs", blogList);
+//        modelAndView.addObject("search", byName);
+//        return modelAndView;
+//    }
 }

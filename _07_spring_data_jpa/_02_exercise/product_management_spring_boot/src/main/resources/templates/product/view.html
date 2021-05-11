@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>product detail</title>
+</head>
+<body>
+<h1>Product Detail</h1>
+
+<form th:action="@{/product/view}" th:object="${product}" method="post">
+    <!--    Id---------------->
+    <div class="form-group">
+        <label for="exampleInputEmail1">ID</label>
+        <input readonly th:field="*{id}" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter product name">
+    </div>
+    <!--    Name---------------->
+    <div class="form-group">
+        <input th:field="*{name}" type="hidden" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter product name">
+    </div>
+    <!--    Manufacture---------------->
+    <div class="form-group">
+        <input th:field="*{manufacture}" type="hidden" class="form-control" id="exampleInputPassword1" placeholder="Enter manufacture">
+    </div>
+    <!--    Production date------------------->
+    <div class="form-group">
+        <input th:field="*{productionDate}" type="hidden" class="form-control" id="production-date" placeholder="Enter production date">
+    </div>
+    <!--    Category--------------------------->
+    <div class="form-group">
+        <select name="category" class="form-control" id="category" hidden>
+            <th:block th:each="c : ${categories}">
+                <option th:value="${c.id}" th:text="${c.name}" th:selected="(${c.id} == *{category.id})"></option>
+            </th:block>
+        </select>
+    </div>
+    <!--    Description-------------->
+    <div class="form-group">
+        <label for="exampleFormControlTextarea1">Detail Description</label>
+        <textarea readonly th:field="*{productDetail.description}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+    </div>
+    <button name="choice" type="submit" class="btn btn-primary" value="edit">Edit</button>
+    <button name="choice" type="submit" class="btn btn-primary" value="backToList">Back To List</button>
+</form>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 package com.codegym.demo.models;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "blogs")
@@ -10,6 +12,20 @@ public class Blog {
     private Long id;
     private String name;
     private String content;
+
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "blogs_categories",
+            joinColumns = @JoinColumn(name = "blog_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories;
+
+    public Blog(String name, String content, Set<Category> categories) {
+        this.name = name;
+        this.content = content;
+        this.categories = categories;
+    }
 
     public Blog() {
     }
@@ -41,5 +57,13 @@ public class Blog {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 }

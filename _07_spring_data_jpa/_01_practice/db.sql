@@ -1,0 +1,2 @@
+create database if not exists customer_province_management;
+use customer_province_management;

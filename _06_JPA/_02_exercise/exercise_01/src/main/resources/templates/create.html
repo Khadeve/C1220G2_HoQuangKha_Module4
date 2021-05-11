@@ -29,6 +29,17 @@
             </td>
         </tr>
         <tr>
+            <td>Select categories:</td>
+            <td>
+                <input type="checkbox" name="chosenCategories"
+                       th:each="category : ${categories}"
+                       th:text="${category.name}"
+                       th:value="${category.id}"
+                       th:field="*{categories}"
+                />
+            </td>
+        </tr>
+        <tr>
             <td>
                 <input type="submit" value="Submit" />
             </td>
