@@ -29,6 +29,10 @@
         <input th:field="*{lastName}" type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter last name">
     </div>
     <div class="form-group">
+        <label for="exampleInputPassword2">Email</label>
+        <input th:field="*{email}" type="text" class="form-control" id="exampleInputPassword2" placeholder="Enter email">
+    </div>
+    <div class="form-group">
         <label for="exampleFormControlSelect1">Select Province</label>
         <select th:field="*{province}" class="form-control" id="exampleFormControlSelect1">
             <th:block th:each="p : ${provinces}">

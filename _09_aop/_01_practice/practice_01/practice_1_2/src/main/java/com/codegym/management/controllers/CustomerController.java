@@ -4,6 +4,7 @@ import com.codegym.management.models.Customer;
 import com.codegym.management.models.Province;
 import com.codegym.management.services.customer.ICustomerService;
 import com.codegym.management.services.province.IProvinceService;
+import com.codegym.management.services.util.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,7 @@ public class CustomerController {
     }
 
     @PostMapping("/create-customer")
-    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer) {
+    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer) throws DuplicateEmailException {
         customerService.save(customer);
         ModelAndView modelAndView = new ModelAndView("customer/createBootstrap");
         modelAndView.addObject("customer", new Customer());
@@ -65,13 +66,14 @@ public class CustomerController {
     @PostMapping("/edit-customer")
     public ModelAndView updateCustomer(@ModelAttribute("customer") Customer customer,
                                        @RequestParam String confirmEdit,
-                                       @PageableDefault(value = 3) Pageable pageable) {
+                                       @PageableDefault(value = 3) Pageable pageable) throws DuplicateEmailException {
         if (confirmEdit.equals("accept")) {
             ModelAndView modelAndView = new ModelAndView("customer/edit");
             modelAndView.addObject("customer", customer);
             customerService.save(customer);
             modelAndView.addObject("message", "Customer updated successfully");
             return modelAndView;
+
         }
         return new ModelAndView("customer/list", "customers", customerService.findAll(pageable));
     }
@@ -111,5 +113,10 @@ public class CustomerController {
         modelAndView.addObject("customers", customerList);
         modelAndView.addObject("search", firstName);
         return modelAndView;
+    }
+
+    @ExceptionHandler(DuplicateEmailException.class)
+    public String showInputNotAcceptable() {
+        return "/customer/input-not-acceptable";
     }
 }

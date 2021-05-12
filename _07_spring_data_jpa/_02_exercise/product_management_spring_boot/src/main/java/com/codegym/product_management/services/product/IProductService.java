@@ -16,7 +16,6 @@ public interface IProductService {
 
     Page<Product> findAllByNameContainingAndPrice(String name, String price, Pageable pageable);
 
-
     Product findById(Long id);
 
     void save(Product product);

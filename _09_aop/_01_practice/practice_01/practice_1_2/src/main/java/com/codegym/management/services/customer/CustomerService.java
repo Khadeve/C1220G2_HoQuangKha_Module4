@@ -3,7 +3,9 @@ package com.codegym.management.services.customer;
 import com.codegym.management.models.Customer;
 import com.codegym.management.models.Province;
 import com.codegym.management.repositories.ICustomerRepository;
+import com.codegym.management.services.util.DuplicateEmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,8 +40,13 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
-    public void save(Customer customer) {
-        customerRepository.save(customer);
+    public void save(Customer customer) throws DuplicateEmailException {
+        try {
+            customerRepository.save(customer);
+        } catch (DataIntegrityViolationException e) {
+            throw new DuplicateEmailException("Email must be distinct");
+        }
+
     }
 
     @Override

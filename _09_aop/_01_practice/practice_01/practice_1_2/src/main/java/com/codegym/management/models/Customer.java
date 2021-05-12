@@ -16,6 +16,9 @@ public class Customer {
     private String firstName;
     private String lastName;
 
+    @Column(unique = true)
+    private String email;
+
     @ManyToOne
     @JoinColumn(name = "province_id", nullable = false)
     private Province province;

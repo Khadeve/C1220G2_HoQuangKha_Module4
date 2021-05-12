@@ -1,6 +1,7 @@
 package com.codegym.demo.models;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ public class Blog {
     private Long id;
     private String name;
     private String content;
+    private LocalDateTime madeTime;
 
     @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
@@ -25,14 +27,17 @@ public class Blog {
         this.name = name;
         this.content = content;
         this.categories = categories;
+        this.madeTime = LocalDateTime.now();
     }
 
     public Blog() {
+        this.madeTime = LocalDateTime.now();
     }
 
     public Blog(String name, String content) {
         this.name = name;
         this.content = content;
+        this.madeTime = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -65,5 +70,13 @@ public class Blog {
 
     public void setCategories(Set<Category> categories) {
         this.categories = categories;
+    }
+
+    public LocalDateTime getMadeTime() {
+        return madeTime;
+    }
+
+    public void setMadeTime(LocalDateTime madeTime) {
+        this.madeTime = madeTime;
     }
 }

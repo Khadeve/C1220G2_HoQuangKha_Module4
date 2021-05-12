@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,7 +32,7 @@ public class BlogController {
     }
 
     @GetMapping("/")
-    public ModelAndView showListBlog(@PageableDefault(value = 3) Pageable pageable,
+    public ModelAndView showListBlog(@PageableDefault(value = 3) @SortDefault(sort = "madeTime", direction = Sort.Direction.DESC) Pageable pageable,
                                      @RequestParam(name = "byName", required = false)String searchByName) {
         ModelAndView modelAndView = new ModelAndView("list");
         Page<Blog> blogList = null;
