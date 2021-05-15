@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>shopping cart</title>
+    <style>
+        a {
+            color: black;
+            text-decoration: none;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+<h1>Your cart</h1>
+<button>
+    <a href="/product/shop">Shop</a>
+</button>
+<h3>
+    <span>Total items: </span>
+    <span th:text="${cart.countItemQuantity()}"></span>
+</h3>
+<h3>
+    <span>Total products: </span>
+    <span th:text="${cart.countProductQuantity()}"></span>
+</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        <th:block th:each="product : ${cart.products}">
+            <tr>
+                <td th:text="${product.getKey().getName()}"></td>
+                <td>
+                    <a id="decreate-btn" th:href="@{/product/minus/__${product.getKey().id}__}">-</a>
+                    <span th:text="${product.getValue()}"></span>
+                    <a id="increase-btn" th:href="@{/product/add/__${product.getKey().id}__(action='show')}">+</a>
+                </td>
+                <td th:text="${product.getKey().price}"></td>
+            </tr>
+        </th:block>
+        <tr>
+            <td>Total: </td>
+            <td></td>
+            <td th:text="${cart.calTotalPayment()}"></td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>create new book</title>
+    <style>
+        th, tr {
+            border: 1px solid black;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<h1>Create New Book</h1>
+<p>
+    <button>
+        <a href="/book/">Back to book list</a>
+    </button>
+</p>
+
+<th:block th:if="${message}">
+    <p style="color:red" th:text="${message}"></p>
+</th:block>
+
+<form action="/book/create" method="post" th:object="${book}">
+    <table>
+        <tr>
+            <td>
+                <label for="name">Name: </label>
+            </td>
+            <td>
+                <input type="text" id="name" th:field="*{name}" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label th:for="numberAvailable">Number Available: </label>
+            </td>
+            <td>
+                <input type="text" id="numberAvailable" th:field="*{numberAvailable}" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label th:for="description">Description: </label>
+            </td>
+            <td>
+                <textarea id="description" th:field="*{description}" rows="5" cols="20"></textarea>
+            </td>
+        </tr>
+    </table>
+    <button type="submit">Create</button>
+</form>
+
+</body>
+</html>

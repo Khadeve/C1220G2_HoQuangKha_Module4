@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>category list</title>
+    <style>
+        th, td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1>Category list</h1>
+<div th:insert="~{/fragments/navbar::navbar}"></div>
+<nav class="navbar navbar-light bg-light justify-content-between">
+    <a class="navbar-brand" href="/category/create">
+        Create new category
+    </a>
+</nav>
+
+<th:block th:if="${message}">
+    <p style="color: red" th:text="${message}"></p>
+</th:block>
+
+<table class="table table-dark">
+    <thead>
+    <tr>
+        <th scope="col">No</th>
+        <th scope="col">Product Category</th>
+        <th scope="col" colspan="2">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="category, counter : ${categories}">
+        <tr>
+            <th scope="row" th:text="${counter.count}"></th>
+            <td th:text="${category.name}"></td>
+            <td>
+                <a href="#">Edit</a>
+            </td>
+            <td>
+                <a href="#">Delete</a>
+            </td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+<!--Pagination----------------->
+<!--<div>-->
+<!--    <a th:href="@{'/search-customer'(searchByFirstName=${search},page=${customers.number - 1})}" th:if="${customers.hasPrevious()}">Previous</a>-->
+<!--    <span th:text="${customers.number + 1}"></span>/<span th:text="${customers.totalPages}"></span>-->
+<!--    <a th:href="@{'/search-customer'(searchByFirstName=${search},page=${customers.number + 1})}" th:if="${customers.hasNext()}">Next</a>-->
+<!--</div>-->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

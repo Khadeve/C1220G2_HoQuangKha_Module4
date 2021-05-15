@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>return book</title>
+</head>
+<body>
+<h1>Return Book</h1>
+<p>
+    <button>
+        <a href="/book/">Back to book list</a>
+    </button>
+</p>
+
+<th:block th:if="${message}">
+    <p style="color:red" th:text="${message}"></p>
+</th:block>
+
+<form th:action="@{/book/return}" method="post">
+    <table>
+        <tr>
+            <td>
+                <label for="rentCode">Rent code: </label>
+            </td>
+            <td>
+                <input id="rentCode" type="number" name="rentCode"/>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" value="submit">
+</form>
+</body>
+</html>

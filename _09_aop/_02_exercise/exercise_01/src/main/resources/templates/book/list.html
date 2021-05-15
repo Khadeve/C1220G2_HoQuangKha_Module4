@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>book list</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<h1>Book List</h1>
+<p>
+    <button>
+        <a href="/book/create">Create new book</a>
+    </button>
+
+    <button>
+        <a href="/book/return">Return book</a>
+    </button>
+</p>
+
+<th:block th:if="${message}">
+    <p style="color:red" th:text="${message}"></p>
+</th:block>
+
+<table>
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Name</th>
+            <th>Number Available</th>
+            <th colspan="2">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="book, counter : ${books}">
+        <tr>
+            <td th:text="${counter.count}"></td>
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.numberAvailable}"></td>
+            <td>
+                <a th:href="@{/book/rent/__${book.id}__}">rent</a>
+            </td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+</body>
+</html>
