@@ -4,6 +4,7 @@ import com.codegym.product_management.models.Category;
 import com.codegym.product_management.models.Order;
 import com.codegym.product_management.models.Product;
 import com.codegym.product_management.services.category.ICategoryService;
+import com.codegym.product_management.services.order.IOrderService;
 import com.codegym.product_management.services.product.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,9 @@ public class ProductController {
     @Autowired
     private ICategoryService categoryService;
 
+    @Autowired
+    private IOrderService orderService;
+
     @ModelAttribute("categories")
     public List<Category> categories() {
         return categoryService.findAll();
@@ -42,7 +46,7 @@ public class ProductController {
         productService.save(product);
         ModelAndView modelAndView = new ModelAndView("/product/create");
         modelAndView.addObject("product", new Product());
-        modelAndView.addObject("message", "Creating successfully");
+        modelAndView.addObject("message", "yes");
         return modelAndView;
     }
 
@@ -132,9 +136,30 @@ public class ProductController {
 //    }
 
     @GetMapping("/delete/{id}")
-    public String showDeleteForm(@PathVariable Long id) {
-        productService.deleteById(id);
-        return "redirect:/product/list";
+    public ModelAndView showDeleteForm(@PathVariable Long id,
+                                       @PageableDefault(value = 3)Pageable pageable)
+    {
+        boolean check = true;  //Can delete this product
+        List<Order> orderList = orderService.findAll();
+        for (Order order : orderList) {
+            List<Product> productList = order.getProducts();
+            for (Product product : productList) {
+                if (product.getId().equals(id)) {
+                    check = false;  //Cannot delete this product.
+                    break;
+                }
+            }
+            if (!check) break;
+        }
+
+        if (check) {
+            productService.deleteById(id);
+            return new ModelAndView("/product/list", "products", productService.findAll(pageable));
+        }
+        ModelAndView modelAndView = new ModelAndView("/product/list");
+        modelAndView.addObject("products", productService.findAll(pageable));
+        modelAndView.addObject("deleteError", "yes");
+        return modelAndView;
     }
 
 //    @PostMapping("/delete")

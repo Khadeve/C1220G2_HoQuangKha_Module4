@@ -34,7 +34,7 @@ public class OrderController {
         orderService.save(order);
         ModelAndView modelAndView = new ModelAndView("/order/create");
         modelAndView.addObject("order", new Order());
-        modelAndView.addObject("message", "Creating successfully");
+        modelAndView.addObject("message", "yes");
         return modelAndView;
     }
 
@@ -79,16 +79,22 @@ public class OrderController {
         return modelAndView;
     }
 
+//    @GetMapping("/delete/{id}")
+//    public ModelAndView showDeleteForm(@PathVariable Long id) {
+//        Order order = orderService.findById(id);
+//        if (order != null) {
+//            ModelAndView modelAndView = new ModelAndView("/order/delete");
+//            modelAndView.addObject("order", order);
+//            return modelAndView;
+//        } else {
+//            return new ModelAndView("/error.404");
+//        }
+//    }
+
     @GetMapping("/delete/{id}")
-    public ModelAndView showDeleteForm(@PathVariable Long id) {
-        Order order = orderService.findById(id);
-        if (order != null) {
-            ModelAndView modelAndView = new ModelAndView("/order/delete");
-            modelAndView.addObject("order", order);
-            return modelAndView;
-        } else {
-            return new ModelAndView("/error.404");
-        }
+    public String showDeleteForm(@PathVariable Long id) {
+        orderService.delete(orderService.findById(id));
+        return "redirect:/order/list";
     }
 
     @PostMapping("/delete")

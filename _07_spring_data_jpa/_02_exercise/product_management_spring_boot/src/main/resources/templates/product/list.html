@@ -25,7 +25,7 @@
 <h1>Product list</h1>
 <div th:insert="~{/fragments/navbar::navbar}"></div>
 <nav class="navbar navbar-light bg-light justify-content-between">
-    <a class="navbar-brand" href="/product/create">
+    <a class="btn btn-success" href="/product/create">
         Create new product
     </a>
 
@@ -72,7 +72,7 @@
     <thead>
     <tr>
         <th scope="col">No</th>
-        <th scope="col">Id</th>
+        <!--        <th scope="col">Id</th>-->
         <th scope="col">Name</th>
         <th scope="col">Manufacture</th>
         <th scope="col">Production Date</th>
@@ -82,10 +82,12 @@
     </tr>
     </thead>
     <tbody>
+    <input id="delete-error" name="deleteError" th:value="${deleteError}" type="hidden">
+
     <th:block th:each="product, counter : ${products}">
         <tr>
             <th scope="row" th:text="${counter.count}"></th>
-            <td th:text="${product.id}"></td>
+            <!--            <td th:text="${product.id}"></td>-->
             <td id="productName" th:text="${product.name}"></td>
             <td th:text="${product.manufacture}"></td>
             <td th:text="${product.productionDate}"></td>
@@ -103,9 +105,6 @@
             </td>
             <td>
                 <!-- Button trigger modal -->
-                <!--                <a th:href="@{/product/delete/__${product.id}__}">-->
-                <!--                    <button type="button" class="btn btn-delete" data-toggle="modal" data-target="#exampleModalCenter">Delete</button>-->
-                <!--                </a>-->
                 <a th:href="@{/product/delete/__${product.id}__}" class="btn btn-danger btn-delete">Delete</a>
             </td>
         </tr>
@@ -113,7 +112,7 @@
     </tbody>
 </table>
 
-<!-- Modal ---------------->
+<!-- Delete Confirmation Modal ---------------->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -137,28 +136,18 @@
     </div>
 </div>
 
-<!--&lt;!&ndash; Modal &ndash;&gt;-->
-<!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>-->
-<!--                <h3 class="modal-title pull-right" id="myModalLabel">!!!!!!xx</h3>-->
+<!--Error delete modal------------------------->
+<!-- Large modal -->
+<div id="error-delete-modal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
+     aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="color: red">
+            <p>Cannot delete.</p>
+            <p>This product is in order(s).</p>
+        </div>
+    </div>
+</div>
 
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <p class="alert alert-danger pull-right" th:text="abc"></p>-->
-
-<!--            </div>-->
-
-<!--            <div class="modal-footer">-->
-<!--                <a href="" type="button" class="btn btn-danger" id="btnDelteYes">xx</a>-->
-<!--                <button type="button" class="btn btn-default" data-dismiss="modal">xx</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--Pagination----------------->
 <div>
     <a th:href="@{'/product/list'(page=${products.number - 1})}"
        th:if="${products.hasPrevious()}">Previous</a>
@@ -179,13 +168,22 @@
         crossorigin="anonymous"></script>
 
 <script>
-    $('.btn-delete').on('click', function (e) {
-        e.preventDefault();
-        var href = $(this).attr('href');
-        $('#myModal #btnDelete').attr('href', href);
+    $(document).ready(function () {
+        $('.btn-delete').on('click', function (e) {
+            e.preventDefault();
+            var href = $(this).attr('href');
+            $('#myModal #btnDelete').attr('href', href);
 
-        $('#myModal').modal();
-    });
+            $('#myModal').modal();
+        });
+
+        if ($('#delete-error').val() === "yes") {
+            // $('#delete-error').val("");
+            $('#error-delete-modal').modal();
+        }
+    })
+
+
 </script>
 </body>
 </html>

@@ -20,7 +20,7 @@
 <h1>Category list</h1>
 <div th:insert="~{/fragments/navbar::navbar}"></div>
 <nav class="navbar navbar-light bg-light justify-content-between">
-    <a class="navbar-brand" href="/category/create">
+    <a class="btn btn-success" href="/category/create">
         Create new category
     </a>
 </nav>
@@ -43,10 +43,10 @@
             <th scope="row" th:text="${counter.count}"></th>
             <td th:text="${category.name}"></td>
             <td>
-                <a href="#">Edit</a>
+                <a href="#" class="btn btn-primary">Edit</a>
             </td>
             <td>
-                <a href="#">Delete</a>
+                <a href="#" class="btn btn-danger">Delete</a>
             </td>
         </tr>
     </th:block>
