@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>shop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        a:hover, a:active {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<h1>Product List</h1>
+<p>
+    <a class="btn btn-success" href="/cart/shopping-cart">Your cart</a>
+</p>
+<th:block th:if="${message}">
+    <p style="color: red" th:text="${message}"></p>
+</th:block>
+
+<!--Product list------------------------->
+<div class="container">
+    <div class="row">
+        <th:block th:each="product : ${products}">
+            <div class="col">
+                <!--                Product image and overview-->
+                <a th:href="@{/product/detail/__${product.id}__}" target="_blank">
+                    <div class="card" style="width: 18rem;">
+                        <img class="card-img-top" th:src="${product.img}" width="150" height="300" alt="Card image cap">
+                        <div class="card-body">
+                            <div style="text-align: center" class="card-text">
+                                <h3 th:text="${product.name}"></h3>
+                                <h4 style="color: orange" th:text="${product.price} + '$'"></h4>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </th:block>
+    </div>
+</div>
+
+<!--Pagination----------------------->
+<div>
+    <a th:href="@{'/product/shop'(page=${products.number - 1})}" th:if="${products.hasPrevious()}">Previous</a>
+    <span th:text="${products.number + 1}"></span>/<span th:text="${products.totalPages}"></span>
+    <a th:href="@{'/product/shop'(page=${products.number + 1})}" th:if="${products.hasNext()}">Next</a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

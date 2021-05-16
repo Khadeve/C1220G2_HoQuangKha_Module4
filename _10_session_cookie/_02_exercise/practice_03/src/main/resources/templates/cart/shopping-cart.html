@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>shopping cart</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .container {
+            background-color: #dddddd;
+        }
+
+        .card-img-overlay {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            font-size: 18px;
+        }
+
+        .card-img-overlay a {
+            color: white;
+            font-weight: bold;
+        }
+
+        /*table, th, td {*/
+        /*    border: 1px solid black;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h2 th:text="'Your Cart (' + ${cart.countItemQuantity()} + ')'"></h2>
+    </div>
+    <hr>
+    <th:block th:each="product : ${cart.products}">
+        <div class="row">
+            <div class="col">
+                <div class="card bg-dark text-white">
+                    <img class="card-img" th:src="${product.getKey().img}" alt="Card image" width="150" height="150">
+                    <div class="card-img-overlay">
+                        <a class="card-title" th:href="@{/product/remove/__${product.getKey().id}__}">X</a>
+<!--                        <h5 class="card-title">X</h5>-->
+                    </div>
+                </div>
+<!--                <img th:src="${product.getKey().img}" alt="product image" width="150" height="150">-->
+            </div>
+            <div class="col-6">
+                <h4 th:text="${product.getKey().name}"></h4>
+                <table>
+                    <tr>
+                        <td>Mã SP:</td>
+                        <td th:text="${product.getKey().id}"></td>
+                    </tr>
+                    <tr>
+                        <td>Đơn giá:</td>
+                        <td th:text="${product.getKey().price} + '$'"></td>
+                    </tr>
+                    <tr>
+                        <td>Số lượng:</td>
+                        <td>
+                            <a id="decreate-btn" th:href="@{/product/minus/__${product.getKey().id}__}">-</a>
+                            <span th:text="${product.getValue()}"></span>
+                            <a id="increase-btn"
+                               th:href="@{/product/add/__${product.getKey().id}__(action='show')}">+</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-4"></div>
+        </div>
+        <hr>
+    </th:block>
+    <div class="row">
+        <h2 th:text="${'Tổng Cộng: ' + cart.calTotalPayment() + '$'}"></h2>
+    </div>
+</div>
+
+<!--<h1>Your cart</h1>-->
+<!--<button>-->
+<!--    <a href="/product/shop">Shop</a>-->
+<!--</button>-->
+<!--<h3>-->
+<!--    <span>Total items: </span>-->
+<!--    <span th:text="${cart.countItemQuantity()}"></span>-->
+<!--</h3>-->
+<!--<h3>-->
+<!--    <span>Total products: </span>-->
+<!--    <span th:text="${cart.countProductQuantity()}"></span>-->
+<!--</h3>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--        <tr>-->
+<!--            <th>Item</th>-->
+<!--            <th>Quantity</th>-->
+<!--            <th>Price</th>-->
+<!--        </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--        <th:block th:each="product : ${cart.products}">-->
+<!--            <tr>-->
+<!--                <td th:text="${product.getKey().getName()}"></td>-->
+<!--                <td>-->
+<!--                    <a id="decreate-btn" th:href="@{/product/minus/__${product.getKey().id}__}">-</a>-->
+<!--                    <span th:text="${product.getValue()}"></span>-->
+<!--                    <a id="increase-btn" th:href="@{/product/add/__${product.getKey().id}__(action='show')}">+</a>-->
+<!--                </td>-->
+<!--                <td th:text="${product.getKey().price}"></td>-->
+<!--            </tr>-->
+<!--        </th:block>-->
+<!--        <tr>-->
+<!--            <td>Total: </td>-->
+<!--            <td></td>-->
+<!--            <td th:text="${cart.calTotalPayment()}"></td>-->
+<!--        </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
