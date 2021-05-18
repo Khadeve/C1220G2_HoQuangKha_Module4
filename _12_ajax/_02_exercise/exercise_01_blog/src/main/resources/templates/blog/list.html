@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>blog list</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        table {
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+<h1>Blog List</h1>
+<p>
+    <a href="/create-blog">Create new blog</a>
+</p>
+
+<p>
+    <a href="/category/categories">Go to category list</a>
+</p>
+
+<th:block th:if="${deleteMessage}">
+    <p style="color: red" th:text="${deleteMessage}"></p>
+</th:block>
+
+<form>
+    <input id="search-field" type="text" name="byName" th:value="${search}" placeholder="search by name">
+    <input id="search-btn" type="submit" name="submit">
+</form>
+<br>
+<table id="blog-list">
+    <thead>
+        <th>Name</th>
+        <th>Made at</th>
+        <th>Category(s)</th>
+        <th th:colspan="3">Action</th>
+    </thead>
+    <tbody>
+        <th:block th:each="blog : ${blogs}">
+            <tr>
+                <td th:text="${blog.name}"></td>
+                <td th:text="${blog.madeTime}"></td>
+                <td th:text="${blog.category.getName()}"></td>
+                <td><a th:href="@{/edit-blog/__${blog.id}__}">Edit</a></td>
+                <td><a th:href="@{/delete-blog/__${blog.id}__}">Delete</a></td>
+                <td><a th:href="@{/view-blog/__${blog.id}__}">View</a></td>
+            </tr>
+        </th:block>
+    </tbody>
+</table>
+<br>
+<button>
+    <a id="load-less">Load less</a>
+</button>
+<button>
+    <a id="load-more">Load more</a>
+</button>
+<input type="hidden" id="page-no" name="offset" th:value="${offset}">
+
+<script>
+    function getBlog(blog) {
+        return `<tr><td >${blog.name}</td><td >${blog.madeTime}</td><td>${blog.category}</td>` +
+            `<td><a class="editBlog" href="${blog.id}">Edit</a></td>
+                <td><a class="deleteBlog" href="${blog.id}">Delete</a></td>
+                <td><a class="viewBlog" href="${blog.id}">View</a></td></tr>`;
+    }
+
+    $(document).ready(function () {
+        $('#search-btn').click(function (event) {
+            let keyword = $('#search-field').val();
+
+            $.ajax({
+                type: "GET",
+                url: `/blog/search?keyword=${keyword}`,
+                success: function (data) {
+                    let content = "<thead>\n" +
+                        "        <th>Name</th>\n" +
+                        "        <th>Made at</th>\n" +
+                        "        <th>Category(s)</th>\n" +
+                        "        <th colspan = 3>Action</th>\n" +
+                        "    </thead>"
+                    content += "<tbody>";
+                    for (let i = 0; i < data.length; i++) {
+                        content += getBlog(data[i]);
+                    }
+                    content+= "</tbody>";
+                    document.getElementById("blog-list").innerHTML = content;
+                }
+            });
+
+            event.preventDefault();
+        });
+
+        $('#load-more').click(function (event) {
+            let pageNoObj = $('#page-no');
+            let offset = parseInt(parseInt(pageNoObj.val()) + 2);
+            pageNoObj.val(offset);
+
+            let url = "/blog/load-more?offset=" + offset;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    let content = "<thead>\n" +
+                        "        <th>Name</th>\n" +
+                        "        <th>Made at</th>\n" +
+                        "        <th>Category(s)</th>\n" +
+                        "        <th colspan = 3>Action</th>\n" +
+                        "    </thead>"
+                    content += "<tbody>";
+                    for (let i = 0; i < data.length; i++) {
+                        content += getBlog(data[i]);
+                    }
+                    content += "</tbody>";
+                    document.getElementById("blog-list").innerHTML = content;
+                }
+            });
+            event.preventDefault();
+        });
+
+        $('#load-less').click(function (event) {
+            let pageNoObj = $('#page-no');
+            let offset = parseInt(parseInt(pageNoObj.val()) - 2);
+            pageNoObj.val(offset);
+
+            let url = "/blog/load-more?offset=" + offset;
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function(data) {
+                    let content = "<thead>\n" +
+                        "        <th>Name</th>\n" +
+                        "        <th>Made at</th>\n" +
+                        "        <th>Category(s)</th>\n" +
+                        "        <th colspan = 3>Action</th>\n" +
+                        "    </thead>"
+                    content += "<tbody>";
+                    for (let i = 0; i < data.length; i++) {
+                        content += getBlog(data[i]);
+                    }
+                    content += "</tbody>";
+                    document.getElementById("blog-list").innerHTML = content;
+                }
+            });
+            event.preventDefault();
+        });
+    })
+</script>
+</body>
+</html>
